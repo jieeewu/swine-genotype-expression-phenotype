@@ -17,7 +17,6 @@
 # Wall clock limit (one of "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds"):
 #SBATCH --time=24:00:00
 
-
 "$fastp"/fastp -w 8 -l 150 -q 5 -u 50 -n 15\
  -i "$sample1".fq.gz -I "$sample2".fq.gz\
  -o "$cleandata1".fq.gz -O "$cleandata2".fq.gz\
