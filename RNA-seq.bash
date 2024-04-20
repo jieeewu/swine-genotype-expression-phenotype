@@ -27,30 +27,3 @@
  |"$samtools" sort -@ 10 -O bam -o "$align_output" - > "$log" 2>&1
  
 "$stringtie" -p 6 -e --rf -A "$assemble_output" -G "$ref" -o "$assemble_output" -l "$align_output" 2>"$log"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
