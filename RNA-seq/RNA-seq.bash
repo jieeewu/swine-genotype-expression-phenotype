@@ -32,29 +32,3 @@ hisat2-build -p 10 --ss "$sus_scrofa.splicesite" --exon "$sus_scrofa.exon" "$Ssc
  
 "$stringtie" -p 6 -e --rf -A "$assemble_output" -G "$ref" -o "$assemble_output" -l "$align_output" 2>"$log"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
