@@ -28,7 +28,6 @@ Outcome_exp <- read_outcome_data(
   beta_col = "BETA",se_col = "SE",eaf_col = "AF1",
   effect_allele_col = "A1",other_allele_col = "A2",
   pval_col = "P",
-  #ncase_col = "N_case",ncontrol_col = "N_control",
   samplesize_col = "N",log_pval = FALSE, min_pval = 1e-200,
   chr_col = "CHR",pos_col = "POS")
   exp_dat <- read_exposure_data(
@@ -55,13 +54,11 @@ if(length(missing_IVs) == 0) {
   missing_IVs <- toupper(missing_IVs)
   write.table(missing_IVs,file = args[5],quote = F,col.names = F,row.names = F,sep = "\n")
  }
-# Harmonising exposure and outcome datasets
 dat <- harmonise_data(
   exposure_dat = exp_dat_clumped, 
   outcome_dat = Outcome_exp, 
   action = 2)
 
-# Replacing missing instruments from outcome GWAS with proxies
 ld_proxies <- read.table(args[6],header = T)
 fit<-try(
   Outcome_proxies <- read_outcome_data(
@@ -82,12 +79,10 @@ if("try-error" %in% class(fit)){
   Outcome_exp <- rbind(Outcome_exp, Outcome_proxies)
   }
 
-# Harmonising exposure and outcome datasets
 dat <- harmonise_data(
   exposure_dat = exp_dat_clumped, 
   outcome_dat = Outcome_exp, 
   action = 2)
-#'Creates table of IVW results for the exposure-outcome combination
   pheno_name=args[2]  
   dat <- dat[dat$mr_keep == TRUE, ]
   dat$beta.exposure=as.numeric(dat$beta.exposure)
