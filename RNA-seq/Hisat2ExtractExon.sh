@@ -12,14 +12,12 @@
 #SBATCH --cpus-per-task=1
 #
 # Memory per node:
-#SBATCH --mem=20G
+#SBATCH --mem=60G
 #
 # Wall clock limit (one of "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds"):
-#SBATCH --time=1:00:00
+#SBATCH --time=12:00:00
 
-hisat2-build -p 10 --ss "$sus_scrofa.splicesite" --exon "$sus_scrofa.exon" "$Sscrofa11.1_genome" "$sus_scrofa_index" > "$log.hisat2.index"
 
-echo "####################################################################"
-date
-echo index is done
-echo "####################################################################"
+####extract the exons from the gtf file.
+hisat2_extract_exons.py "$ref_path"Sus_scrofa.Sscrofa11.1.104.gtf > "$path2"sus_scrofa.exon
+
