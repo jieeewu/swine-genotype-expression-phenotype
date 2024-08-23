@@ -1,19 +1,29 @@
 # swine-genotype-expression-phenotype
 
-## TWAS Prediction Model Usage Guide
+## TWAS Predictive Model Usage Guide
 
-To facilitate the use of pre-built TWAS prediction models, we provide the necessary shell code along with the corresponding data files.
+We provide the necessary shell scripts and corresponding data to facilitate the direct use of pre-built TWAS predictive models.
 
-### Requirements
+### Note: PrediXcan is Suitable for Individual-Level Data
 
-- **Python 3.5 or higher**: Ensure you have Python 3.5 or a higher version installed.
-- **Virtual Environment**: Set up a virtual environment according to the [MetaXcan](https://github.com/hakyimlab/MetaXcan).
+### Prerequisites
+
+Ensure you have Python 3.5 or higher. Set up a virtual environment according to the [MetaXcan](https://github.com/hakyimlab/MetaXcan) requirements:
+
+- numpy (>=1.11.1)
+- scipy (>=0.18.1)
+- pandas (>=0.18.1)
+- patsy (>=0.5.0)
+- statsmodels (>=0.8.0)
+- h5py (>=2.7.1)
+- bgen_reader (>=3.0.3)
+- cyvcf2 (>=0.8.0)
 
 ### Input Files
 
-1. **Model Database Files**: Download the `*.db` files for the corresponding tissues from our website.
-2. **Genotype VCF Files**: Phased genotype data in VCF format.
-3. **Phenotype Files**: The phenotype file should contain columns in the following order: `FID`, `IID`, `pheno1`, `pheno2`, ...
+1. **Database Files**: Download the corresponding tissue-specific `*.db` files from our site as per the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
+2. **Genotype Files**: Phased genotype files in VCF format, which can be either WGS data or imputed genotype data (e.g., from [SWIM](http://106.13.12.181:9088/#/home)).
+3. **Phenotype Files**: Files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
 
 ### Output Files
 
@@ -52,6 +62,5 @@ python3 $METAXCAN/PrediXcanAssociation.py \
 --verbosity 9 \
 --throw
 done
-
 done
 
