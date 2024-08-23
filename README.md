@@ -21,7 +21,7 @@ Ensure you have Python 3.5 or higher. Set up a virtual environment according to 
 
 ### Input Files
 
-1. **Database Files**: Download the corresponding tissue-specific `*.db` files from our site as per the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
+1. **Database Files**: Download the corresponding tissue-specific `*.db` files from this site. These `*.db` files are obtained according to the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
 2. **Genotype Files**: Phased genotype files in VCF format, which can be either WGS data or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)).
 3. **Phenotype Files**: Files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
 
