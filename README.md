@@ -19,11 +19,14 @@ Ensure you have Python 3.5 or higher. Set up a virtual environment according to 
 - bgen_reader (>=3.0.3)
 - cyvcf2 (>=0.8.0)
 
+Additionally, download the PrediXcanAssociation.py and Predict.py scripts from MetaXcan.
+
+
 ### Input Files
 
-1. **Database Files**: Download the corresponding tissue-specific `*.db` files from this site. These `*.db` files are obtained according to the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
+1. **Database Files**: Download the corresponding tissue-specific `*.db` files from this site. These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
 2. **Genotype Files**: Phased genotype files in VCF format, which can be either WGS data or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). The SNP ID format should be chrom_position_ref (e.g., 1_502855_C).
-3. **Phenotype Files**: Files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
+3. **Phenotype Files**: `phenotype_name.list` and `${phenos_file}`. Phenos files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
 
 ### Output Files
 
@@ -56,7 +59,7 @@ for pheno in `cat phenotype_name.list`
 do
 python3 $METAXCAN/PrediXcanAssociation.py \
 --expression_file ${Predixcan}/Predict_output/${tissue}_prediction_output.txt \
---input_phenos_file ${phenos} \
+--input_phenos_file ${phenos_file} \
 --input_phenos_column $pheno \
 --output ${Predixcan}/PrediXcanAssociation/${tissue}/${tissue}_${pheno}_association.txt \
 --verbosity 9 \
