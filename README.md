@@ -19,8 +19,7 @@ Ensure you have Python 3.5 or higher. Set up a virtual environment according to 
 - bgen_reader (>=3.0.3)
 - cyvcf2 (>=0.8.0)
 
-Additionally, download the PrediXcanAssociation.py and Predict.py scripts from MetaXcan.
-
+You can also download the PrediXcanAssociation.py and Predict.py scripts from the Association_study folder or MetaXcan.
 
 ### Input Files
 
