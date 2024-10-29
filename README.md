@@ -24,7 +24,7 @@ Additionally, download the PrediXcanAssociation.py and Predict.py scripts from M
 
 ### Input Files
 
-1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the Association_study folder `${tissue}_models.db`. These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
+1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the Association_study folder (`${tissue}_models.db`). These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
 2. **Genotype Files**: Phased genotype files in VCF format, which can be either WGS data or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). The SNP ID format should be chrom_position_ref (e.g., 1_502855_C).
 3. **Phenotype Files**: `phenotype_name.list` and `${phenos_file}`. Phenos files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
 
