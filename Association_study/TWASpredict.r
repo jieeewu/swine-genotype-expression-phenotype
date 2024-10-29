@@ -1,5 +1,5 @@
 #==========================================================================================================================================
-#========一些测试群体中，某一gene的eQTL可能只有一个（在training set中实际有两个），因此只针对群体实际存在的eQTL进行fit再预测expr===========
+#===========================================================  Predict expression===========================================================
 #==========================================================================================================================================
 
 args=commandArgs(TRUE)
@@ -13,8 +13,8 @@ Tissue=c("Mu","Li","AF","BF")
 Tissue=args[4]
 }
 
-#由我们提供
-input_path="/mnt/research/qgg/wu/YFJH/eQTL_mapping/TWAS/LM/DLY_32traits"
+
+input_path="/TWAS/LM/DLY_traits"
 
 for(tissue in Tissue){
 train_set_expr=paste0(input_path,"/",tissue,"_training_set_for_predict_expr.RData")
@@ -33,8 +33,7 @@ gene_name=names(train_set_list)[gene_line]
 #train_set
 train_set <- train_set_list[[gene_line]]
 snp_set=colnames(train_set)[-1]
-if(unique(is.na(match(snp_set,colnames(test_genotype))))){ #只要有一个eQTL就行
-#if(sum(is.na(match(snp_set,colnames(test_genotype))))>=1){ #必须都有才可以
+if(unique(is.na(match(snp_set,colnames(test_genotype))))){ 
 predict_expr=NA
 } else{
 #extract genotype
