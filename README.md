@@ -1,5 +1,10 @@
 # swine-genotype-expression-phenotype
 
+## Pipeline Overview
+The following diagram illustrates the overall pipeline of the project, including data preprocessing and core processing logic.
+
+![Pipeline Overview](Pipeline/Pipeline.png)
+
 ## TWAS Predictive Model Usage Guide
 
 We provide the necessary shell scripts and corresponding data to facilitate the direct use of pre-built TWAS predictive models.
