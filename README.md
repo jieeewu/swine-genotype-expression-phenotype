@@ -11,6 +11,36 @@ The following diagram illustrates the overall pipeline of the project, including
 
 ![Pipeline Overview](Pipeline/Pipeline.png)
 
+
+
+## Overview of statistical analyses
+
+- Data preprocessing and quality control
+
+  - Genotype data
+
+  - RNA-seq data
+
+- Genotype–expression association analyses
+      - eQTL mapping and functional characterization analysis
+     - Tissue sharing patterns
+
+-  Expression-mediated genetic effects
+
+  -  Mediation analysis
+  -  Pathway analysis
+
+- Genotype–phenotype association analyses
+  - Genome-Wide Association Study (GWAS)
+  - Enrichment analysis of eQTLs within GWAS QTLs
+
+  - Transcriptome-wide association study (TWAS)
+
+- Causal inference and colocalization analyses
+  - Mendelian randomization
+  - Colocalization analysis
+    
+
 ## TWAS Predictive Model Usage Guide
 
 We provide the necessary shell scripts and corresponding data to facilitate the direct use of pre-built TWAS predictive models.
