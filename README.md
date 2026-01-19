@@ -1,4 +1,10 @@
-# Swine-Genotype-Expression-Phenotype (SGEP)
+# Swine Genotype Expression Phenotype (SGEP)
+
+## Overview
+
+This repository contains the scripts and workflow used in our study to integrate genotype, gene expression, and phenotype data in swine, enabling downstream association analyses between genetic variation, transcriptomic regulation, and phenotypic traits.
+
+The pipeline includes data preprocessing, expression quantification, and genotype–expression–phenotype association analyses, as described in the accompanying manuscript.
 
 ## Pipeline Overview
 The following diagram illustrates the overall pipeline of the project, including data preprocessing and core processing logic.
@@ -73,3 +79,13 @@ done
 
 
 ```
+
+## Citation
+
+If you use this pipeline or code in your work, please cite the corresponding publication and the archived code DOI.
+
+------
+
+## Contact
+
+For questions or issues regarding the pipeline, please open an issue in this repository or contact the corresponding author.
