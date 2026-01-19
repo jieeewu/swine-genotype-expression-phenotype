@@ -9,7 +9,7 @@ The pipeline includes data preprocessing, expression quantification, and genotyp
 ## Pipeline Overview
 The following diagram illustrates the overall pipeline of the project, including data preprocessing and core processing logic.
 
-
+![Pipeline Overview](Pipeline/Pipeline.png)
 
 ## TWAS Predictive Model Usage Guide
 
