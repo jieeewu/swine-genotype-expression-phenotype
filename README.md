@@ -80,9 +80,18 @@ done
 
 ```
 
+## Code Availability
+
+The source code is available at:
+https://github.com/jieeewu/swine-genotype-expression-phenotype
+
+A versioned release of the code used in this study has been archived in Zenodo
+and assigned a DOI: https://doi.org/10.5281/zenodo.18297703
+
 ## Citation
 
-If you use this pipeline or code in your work, please cite the corresponding publication and the archived code DOI.
+If you use this pipeline or code in your work, please cite the corresponding publication
+and the archived code DOI.
 
 ------
 
