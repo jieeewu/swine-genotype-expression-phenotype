@@ -128,3 +128,7 @@ and the archived code DOI.
 ## Contact
 
 For questions or issues regarding the pipeline, please open an issue in this repository or contact the corresponding author.
+
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fjieeewu%2Fswine-genotype-expression-phenotype&label=VISITOR&countColor=%23263759)
+
+
