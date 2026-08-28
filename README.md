@@ -122,8 +122,8 @@ and assigned a DOI: https://doi.org/10.5281/zenodo.18297703
 
 If you use this pipeline or code in your work, please cite our manuscript and the archived code:
 
-- **Publication:**
-  Author Name(s). *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Journal Name* (Accepted / In Press).
+- **Publication:**.
+Jie Wu*, Ming Yang*, Zebin Zhang*, Enqin Zheng*, Zhanwei Zhuang, Shenping Zhou, Cineng Xu, Yibin Qiu, Donglin Ruan, Jianping Quan, Rongrong Ding, ..., Wen Huang#, Jie Yang#, Zhenfang Wu#. *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Nature Communications* (Accepted).
 - **Code Archive:**
   [Zenodo DOI: https://doi.org/10.5281/zenodo.18297703]
 
