@@ -120,8 +120,12 @@ and assigned a DOI: https://doi.org/10.5281/zenodo.18297703
 
 ## Citation
 
-If you use this pipeline or code in your work, please cite the corresponding publication
-and the archived code DOI.
+If you use this pipeline or code in your work, please cite our manuscript and the archived code:
+
+- **Publication:**
+  Author Name(s). *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Journal Name* (Accepted / In Press).
+- **Code Archive:**
+  [Zenodo DOI: https://doi.org/10.5281/zenodo.18297703]
 
 ------
 
