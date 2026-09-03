@@ -1,3 +1,10 @@
+############################################################
+# PrediXcan association analysis
+#
+# This script performs gene-level association analysis using
+# genetically predicted gene expression levels and phenotype
+# data based on the PrediXcan framework.
+############################################################
 #! /usr/bin/env python
 import os
 import logging
