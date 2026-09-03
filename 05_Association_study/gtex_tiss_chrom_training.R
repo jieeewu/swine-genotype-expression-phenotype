@@ -1,3 +1,7 @@
+############################################################
+# Gene expression prediction model using nested cross-validation
+############################################################
+
 argv <- commandArgs(trailingOnly = TRUE)
 chrom <- argv[1]
 code_path <- argv[2]
