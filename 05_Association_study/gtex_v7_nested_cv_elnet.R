@@ -16,8 +16,7 @@ get_filtered_snp_annot <- function(snp_annot_file_name) {
                (ref_vcf == 'G' & alt_vcf == 'C')) &
              !(is.na(rsid))) %>%
     distinct(varID, .keep_all = TRUE)
-  snp_annot
-}
+  snp_annot}
 
 
 get_maf_filtered_genotype <- function(genotype_file_name,  maf, samples) {
@@ -25,18 +24,14 @@ get_maf_filtered_genotype <- function(genotype_file_name,  maf, samples) {
   gt_df <- gt_df[,(colnames(gt_df) %in% samples )] %>% t() %>% as.data.frame()
   effect_allele_freqs <- colMeans(gt_df) / 2
   gt_df <- gt_df[,which((effect_allele_freqs >= maf) & (effect_allele_freqs <= 1 - maf))]
-  gt_df
-}
+  gt_df}
 
 get_gene_annotation <- function(gene_annot_file_name, chrom, gene_types=c('protein_coding', 'pseudogene', 'lincRNA')){
   gene_df <- read.table(gene_annot_file_name, header = TRUE, stringsAsFactors = FALSE,check.names=F) %>%
     filter((chr == chrom) & gene_type %in% gene_types)
-  gene_df
-}
+  gene_df}
 
-get_gene_type <- function(gene_annot, gene) {
-  filter(gene_annot, gene_id == gene)$gene_type
-}
+get_gene_type <- function(gene_annot, gene) {filter(gene_annot, gene_id == gene)$gene_type}
 
 get_gene_expression <- function(gene_expression_file_name, gene_annot) {
   expr_df <- as.data.frame(t(read.table(gene_expression_file_name, header = T, stringsAsFactors = F, row.names = 1,check.names=F)))
