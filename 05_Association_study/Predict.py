@@ -15,9 +15,7 @@ from metax import Exceptions
 from metax import PredictionModel
 from metax.genotype import Genotype
 from metax.misc import GWASAndModels, Genomics, KeyedDataSource
-
 GF = Genotype.GF
-
 def dosage_generator(args, variant_mapping=None, weights=None):
     if args.liftover:
         logging.info("Acquiring liftover conversion")
