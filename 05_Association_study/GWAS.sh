@@ -9,7 +9,7 @@
 #SBATCH --ntasks-per-node=1
 #
 # Processors per task:
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=15
 #
 # Memory per node:
 #SBATCH --mem=60G
@@ -17,8 +17,7 @@
 # Wall clock limit (one of "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds"):
 #SBATCH --time=12:00:00
 
-source /mnt/research/qgg/wu/YFJH/eQTL_mapping/code/Absolute_path.sh
-PC_number=50     
+source Absolute_path.sh   
 suffix=${PC_number}pc
 
 for breed in S21_3769indivi   
