@@ -18,12 +18,12 @@
 #SBATCH --time=48:00:00
 
 /mnt/research/qgg/software/shapeit-4.2/bin/shapeit4.2 \
---input ${WGS_file}/1501DLY_SNP_clean_IDchanged_QC_for_QTL_merged.vcf.gz \
---map ${phasing_1501}/genMap_1cMperMb_${chr}.txt \
+--input ${WGS_file} \
+--map ${phasing}/${genMap} \
 --region ${chr} \
---output ${phasing_1501}/1501DLY_SNP_QC_for_QTL_${chr}_phased.bcf \
+--output ${phasing_result} \
 --thread ${thread_num} \
---log ${log}/phasing/1501_chr${chr}_phasing.log
+--log ${log}/phasing/${phasing_log}
 
-/mnt/research/qgg/software/bcftools-1.13/bcftools index ${phasing_1501}/1501DLY_SNP_QC_for_QTL_${chr}_phased.bcf
+/mnt/research/qgg/software/bcftools-1.13/bcftools index ${phasing_result}
 
