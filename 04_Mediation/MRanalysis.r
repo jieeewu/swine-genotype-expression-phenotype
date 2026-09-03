@@ -1,139 +1,152 @@
-library("data.table")
-library("dplyr")
-library("tidyr")
-library("foreign")
-library("tibble")
-library("metafor")
-library("meta")
-library("survival")
-library("ggplot2")
-library("plyr")
-library("gridExtra")
-library("gtable")
-library("grid")
-library("tidyverse")
-library("stringr")
-library("coloc")
-library("devtools")
-library("glmnet")
-library("MendelianRandomization")
-library("TwoSampleMR")
+############################################################
+# Mendelian randomization analysis using eQTL instruments
+# IVW method
+############################################################
+library(data.table)
+library(dplyr)
+library(TwoSampleMR)
+library(MendelianRandomization)
 args <- commandArgs(TRUE)
 SNP_list <- read.table(args[1])
-colnames(SNP_list)<-"SNP"
+colnames(SNP_list) <- "SNP"
+gene_anno <- read.table(args[7], header=T, row.names=1)
+trait_type <- args[8]
+#---------------------- read outcome GWAS ----------------------
 Outcome_exp <- read_outcome_data(
-  filename = args[3], 
-  snps = SNP_list$SNP, 
-  sep = "\t",snp_col = "SNP",
-  beta_col = "BETA",se_col = "SE",eaf_col = "AF1",
-  effect_allele_col = "A1",other_allele_col = "A2",
-  pval_col = "P",
-  #ncase_col = "N_case",ncontrol_col = "N_control",
-  samplesize_col = "N",log_pval = FALSE, min_pval = 1e-200,
-  chr_col = "CHR",pos_col = "POS")
-  exp_dat <- read_exposure_data(
-    filename = args[4],
-    clump = F, sep = " ", snp_col = "SNP",
-    beta_col = "BETA", se_col = "SE", 
-    eaf_col = "MAF",
-    effect_allele_col = "A1", other_allele_col = "A2",
-    pval_col = "P", 
-    samplesize_col = "NMISS", min_pval = 1e-200, log_pval = FALSE, 
-    chr_col = "CHR", pos_col = "BP" ,gene_col = "gene")
+  filename=args[3],
+  snps=SNP_list$SNP,
+  sep="\t",
+  snp_col="SNP",
+  beta_col="BETA",
+  se_col="SE",
+  eaf_col="AF1",
+  effect_allele_col="A1",
+  other_allele_col="A2",
+  pval_col="P",
+  samplesize_col="N",
+  chr_col="CHR",
+  pos_col="POS",
+  log_pval=FALSE,
+  min_pval=1e-200)
 
-exp_dat_clumped <- exp_dat
-exp_dat_clumped$SNP <- paste0(exp_dat_clumped$SNP,"_",tolower(exp_dat_clumped$effect_allele.exposure))
-missing_IVs <- exp_dat_clumped$SNP[!(exp_dat_clumped$SNP %in% Outcome_exp$SNP)]
-if(length(missing_IVs) == 0) {
-  print("All exposure IVs found in outcome GWAS.")
-} else {
-  print(paste0("Number of IVs missing from outcome GWAS: ", as.character(length(missing_IVs))))
-  print("List of IVs missing from outcome GWAS:")
-  for (i in 1:length(missing_IVs)) {
-    print(paste0(missing_IVs[i]))
-  }
-  missing_IVs <- toupper(missing_IVs)
-  write.table(missing_IVs,file = args[5],quote = F,col.names = F,row.names = F,sep = "\n")
- }
-# Harmonising exposure and outcome datasets
-dat <- harmonise_data(
-  exposure_dat = exp_dat_clumped, 
-  outcome_dat = Outcome_exp, 
-  action = 2)
+#---------------------- read exposure eQTL ----------------------
 
-# Replacing missing instruments from outcome GWAS with proxies
-ld_proxies <- read.table(args[6],header = T)
-fit<-try(
-  Outcome_proxies <- read_outcome_data(
-    filename = GWAS_file, 
-    snps = ld_proxies$SNP_B, sep = "\t",snp_col = "SNP",
-    beta_col = "BETA",se_col = "SE",eaf_col = "AF1",
-    effect_allele_col = "A1",other_allele_col = "A2",
-    pval_col = "P",
-    ncase_col = "N_case",ncontrol_col = "N_control",
-    samplesize_col = "N",log_pval = FALSE, min_pval = 1e-200,
-    chr_col = "CHR",pos_col = "POS")
+exp_dat <- read_exposure_data(
+  filename=args[4],
+  clump=FALSE,
+  sep=" ",
+  snp_col="SNP",
+  beta_col="BETA",
+  se_col="SE",
+  eaf_col="MAF",
+  effect_allele_col="A1",
+  other_allele_col="A2",
+  pval_col="P",
+  samplesize_col="NMISS",
+  chr_col="CHR",
+  pos_col="BP",
+  gene_col="gene",
+  log_pval=FALSE,
+  min_pval=1e-200
 )
 
-if("try-error" %in% class(fit)){
-  print(paste0("No proxy SNP available for all exposure SNPs in outcome GWAS."))
-  }else{
-  print(paste0("Proxy SNP found. ", ld_proxies[ld_proxies$SNP_B %in% Outcome_proxies$SNP,"SNP_A"], " replaced with ", ld_proxies[ld_proxies$SNP_B %in% Outcome_proxies$SNP,"SNP_B"]))
-  Outcome_exp <- rbind(Outcome_exp, Outcome_proxies)
-  }
+exp_dat_clumped <- exp_dat
+exp_dat_clumped$SNP <- paste0(exp_dat_clumped$SNP,"_", tolower(exp_dat_clumped$effect_allele.exposure))
+#---------------------- check missing SNP ----------------------
 
-# Harmonising exposure and outcome datasets
-dat <- harmonise_data(
-  exposure_dat = exp_dat_clumped, 
-  outcome_dat = Outcome_exp, 
-  action = 2)
-#'Creates table of IVW results for the exposure-outcome combination
-  pheno_name=args[2]  
-  dat <- dat[dat$mr_keep == TRUE, ]
-  dat$beta.exposure=as.numeric(dat$beta.exposure)
-  dat$se.exposure=as.numeric(dat$se.exposure)
-  dat$beta.outcome=as.numeric(dat$beta.outcome)
-  dat$se.outcome=as.numeric(dat$se.outcome)
-  mr_object = mr_input(bx = as.numeric(dat$beta.exposure), 
-                     bxse = as.numeric(dat$se.exposure), 
-                     by = as.numeric(dat$beta.outcome), 
-                     byse = as.numeric(dat$se.outcome), 
-                     exposure = dat$gene.exposure[1], 
-                     outcome = dat$Phenotype.outcome[1], 
-                     snps = dat$SNP)
-  ivw_res = MendelianRandomization::mr_ivw(mr_object) 
-
-if (ivw_res@Outcome == pheno_name) {
-  ivw_res@Estimate = exp(ivw_res@Estimate) 
-  ivw_res@CILower = exp(ivw_res@CILower)
-  ivw_res@CIUpper = exp(ivw_res@CIUpper)
+missing_IVs <- exp_dat_clumped$SNP[!(exp_dat_clumped$SNP %in% Outcome_exp$SNP)]
+if(length(missing_IVs)>0){
+  write.table(
+    toupper(missing_IVs),
+    file=args[5],
+    quote=FALSE,
+    col.names=FALSE,
+    row.names=FALSE,
+    sep="\n")
 }
-if (ivw_res@Exposure == pheno_name) {
-  ivw_res@Estimate = log(2)*(ivw_res@Estimate)
-  ivw_res@CILower = log(2)*(ivw_res@CILower)
-  ivw_res@CIUpper = log(2)*(ivw_res@CIUpper)
+#---------------------- add proxy SNP ----------------------
+
+if(file.exists(args[6])){
+  ld_proxies <- read.table(args[6],header=T)
+  if(nrow(ld_proxies)>0){
+    fit <- try( Outcome_proxies <- read_outcome_data(
+        filename=args[3],
+        snps=ld_proxies$SNP_B,
+        sep="\t",
+        snp_col="SNP",
+        beta_col="BETA",
+        se_col="SE",
+        eaf_col="AF1",
+        effect_allele_col="A1",
+        other_allele_col="A2",
+        pval_col="P",
+        samplesize_col="N",
+        chr_col="CHR",
+        pos_col="POS",
+        log_pval=FALSE,
+        min_pval=1e-200),
+        silent=TRUE)
+    if(!inherits(fit,"try-error")){
+      Outcome_exp <- rbind(
+        Outcome_exp,
+        Outcome_proxies)}}}
+#---------------------- harmonise ----------------------
+dat <- harmonise_data(exposure_dat=exp_dat_clumped, outcome_dat=Outcome_exp, action=2)
+dat <- dat[dat$mr_keep==TRUE,]
+dat$beta.exposure <- as.numeric(dat$beta.exposure)
+dat$se.exposure <- as.numeric(dat$se.exposure)
+dat$beta.outcome <- as.numeric(dat$beta.outcome)
+dat$se.outcome <- as.numeric(dat$se.outcome)
+#---------------------- MR analysis ----------------------
+if(length(dat$SNP)>1){
+  mr_object <- mr_input(bx=dat$beta.exposure, bxse=dat$se.exposure, by=dat$beta.outcome,
+    byse=dat$se.outcome,
+    exposure=dat$gene.exposure[1],
+    outcome=dat$Phenotype.outcome[1],
+    snps=dat$SNP)
+
+  ivw_res <- MendelianRandomization::mr_ivw(mr_object)
+  Estimate <- ivw_res@Estimate
+  CILower <- ivw_res@CILower
+  CIUpper <- ivw_res@CIUpper
+  P <- ivw_res@Pvalue
+}else{
+  Estimate <- dat$beta.outcome/dat$beta.exposure
+  ratio_se <- sqrt(
+    (dat$se.outcome/dat$beta.exposure)^2+(dat$beta.outcome*dat$se.exposure/dat$beta.exposure^2)^2)
+  CILower <- Estimate-qnorm(0.975)*ratio_se
+  CIUpper <- Estimate+qnorm(0.975)*ratio_se
+  P <- 2*pnorm(-abs(Estimate/ratio_se))
 }
-  df = data.frame(exposure = ivw_res@Exposure,
-                  gene_symbol=gene_anno[ivw_res@Exposure,"symbol"],
-                  outcome = ivw_res@Outcome, 
-                  N_SNPs = ivw_res@SNPs,
-                  Estimate = paste0(sprintf("%.2f", round(ivw_res@Estimate, 2)), " (", sprintf("%.2f", round(ivw_res@CILower, 2)), ", ", sprintf("%.2f", round(ivw_res@CIUpper, 2)), ")"),
-                  OR=sprintf("%.2f", round(ivw_res@Estimate, 2)),
-                  CILower=sprintf("%.2f", round(ivw_res@CILower, 2)),
-                  CIUpper= sprintf("%.2f", round(ivw_res@CIUpper, 2)),
-                  P = format(ivw_res@Pvalue, digits = 3, scientific = TRUE))
+if(trait_type=="binary"){
+  Estimate <- exp(Estimate)
+  CILower <- exp(CILower)
+  CIUpper <- exp(CIUpper)}
+#---------------------- result table ----------------------
+gene_id <- dat$gene.exposure[1]
+gene_symbol <- ifelse(gene_id %in% rownames(gene_anno), gene_anno[gene_id,"symbol"], gene_id)
+df <- data.frame(
+  exposure=gene_id,
+  gene_symbol=gene_symbol,
+  outcome=dat$Phenotype.outcome[1],
+  N_SNPs=length(dat$SNP),
+  Estimate=paste0(sprintf("%.2f",Estimate), " (",sprintf("%.2f",CILower), ", ",sprintf("%.2f",CIUpper),")"),OR=sprintf("%.2f",Estimate),
+  CILower=sprintf("%.2f",CILower),
+  CIUpper=sprintf("%.2f",CIUpper),
+  P=format(P,digits=3,scientific=TRUE))
 
-dat$mr_keep <- as.logical(dat$mr_keep)
-res_sin = mr_singlesnp(dat, all_method = c("mr_ivw_mre"))
-res_sin$exposure = gene_anno[dat$gene.exposure[1],"symbol"]
-res_sin$outcome = dat$Phenotype.outcome[1]
+#---------------------- single SNP result ----------------------
+res_sin <- mr_singlesnp(dat,all_method=c("mr_ivw_mre"))
+res_sin$exposure <- gene_symbol
+res_sin$outcome <- dat$Phenotype.outcome[1]
+res_sin$SNP[res_sin$SNP=="All - Inverse variance weighted (multiplicative random effects)"] <- "MR-IVW estimate"
+res_sin$UCL <- res_sin$b+qnorm(0.975)*res_sin$se
+res_sin$LCL <- res_sin$b-qnorm(0.975)*res_sin$se
+SNPs <- res_sin$SNP[res_sin$SNP!="MR-IVW estimate"]
+SNPs_ordered <- SNPs[order(res_sin$b)]
+res_sin$SNP <- ordered(
+  res_sin$SNP,
+  levels=c("MR-IVW estimate",SNPs_ordered))
 
-res_sin$SNP[res_sin$SNP == "All - Inverse variance weighted (multiplicative random effects)"] = "MR-IVW estimate"
-res_sin$UCL = res_sin$b + qnorm(0.975) * res_sin$se
-res_sin$LCL = res_sin$b - qnorm(0.975) * res_sin$se
 
-SNPs = res_sin$SNP[!(res_sin$SNP == "MR-IVW estimate")]
-SNPs_ordered = SNPs[order(res_sin$b)]
-res_sin$SNP = ordered(res_sin$SNP, levels = c("MR-IVW estimate", SNPs_ordered))
-
-save(res_sin,df,file = args[7])
+save(res_sin, df, dat, file=args[9])
