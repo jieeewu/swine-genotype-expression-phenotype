@@ -116,7 +116,7 @@ The source code is available at:
 https://github.com/jieeewu/swine-genotype-expression-phenotype
 
 A versioned release of the code used in this study has been archived in Zenodo
-and assigned a DOI: https://doi.org/10.5281/zenodo.22274556
+and assigned a DOI: https://doi.org/10.5281/zenodo.22275711
 
 ## Citation
 
@@ -125,7 +125,7 @@ If you use this pipeline or code in your work, please cite our manuscript and th
 - **Publication:**.
 Jie Wu*, Ming Yang*, Zebin Zhang*, Enqin Zheng*, Zhanwei Zhuang, Shenping Zhou, Cineng Xu, Yibin Qiu, Donglin Ruan, Jianping Quan, Rongrong Ding, ..., Wen Huang#, Jie Yang#, Zhenfang Wu#. *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Nature Communications* (Accepted).
 - **Code Archive:**
-  [Zenodo DOI: https://doi.org/10.5281/zenodo.22274556]
+  [Zenodo DOI: https://doi.org/10.5281/zenodo.22275711]
 
 ------
 
