@@ -73,12 +73,12 @@ h5py
 cyvcf2
 bgen_reader
 
-You can also download the PrediXcanAssociation.py and Predict.py scripts from the [Association_study folder](https://github.com/jieeewu/swine-genotype-expression-phenotype/tree/main/05_Association_study) or [MetaXcan](https://github.com/hakyimlab/MetaXcan).
+You can also download the `PrediXcanAssociation.py` and `Predict.py` scripts from the [Association_study folder](https://github.com/jieeewu/swine-genotype-expression-phenotype/tree/main/05_Association_study) or [MetaXcan](https://github.com/hakyimlab/MetaXcan).
 
 ### Input Files
 
-1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the [Tissue_DB](Tissue_DB/) folder (`${tissue}_models.db`). These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).Each database contains SNP weights for predicting genetically regulated gene expression in a specific tissue.
-2. **Genotype Files**: Phased genotype files in VCF format,generated from WGS or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). Variant IDs must match the identifiers used in the prediction models. The SNP ID format should be `chrom_position_ref` (e.g., `1_502855_C`; Sscrofa11.1).
+1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the [Tissue_DB](Tissue_DB/) folder (`${tissue}_models.db`). These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial). Each database contains SNP weights for predicting genetically regulated gene expression in a specific tissue.
+2. **Genotype Files**: Phased genotype files in VCF format, generated from WGS or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). Variant IDs must match the identifiers used in the prediction models. The SNP ID format should be `chrom_position_ref` (e.g., `1_502855_C`; Sscrofa11.1).
 3. **Phenotype Files**: `phenotype_name.list` and `${phenos_file}`. The phenotype file should contain FID, IID, and phenotype columns (e.g., pheno1, pheno2, etc.)
 
 ### Output Files
@@ -88,6 +88,7 @@ You can also download the PrediXcanAssociation.py and Predict.py scripts from th
 3. `${tissue}_${pheno}_association.txt`: Association between genetically predicted expression and phenotype.
 
 ### Running the Shell Script
+Individual level PrediXcan: [introduction, tutorials and manual](https://github.com/hakyimlab/MetaXcan/wiki/Individual-level-PrediXcan:-introduction,-tutorials-and-manual)
 
 ```bash
 # Mu: Muscle
@@ -126,6 +127,50 @@ done
 done
 
 
+```
+
+## Summary-level TWAS Analysis
+
+For summary-level TWAS analysis, users can use S-PrediXcan with:
+
+### Summary-level S-PrediXcan
+
+Required files:
+
+- Tissue-specific model database (*.db)
+- LD covariance file (*.txt.gz)
+- GWAS summary statistics
+
+
+Please refer to the MetaXcan [S-PrediXcan documentation](https://github.com/hakyimlab/MetaXcan/wiki/S-PrediXcan-Command-Line-Tutorial).
+
+### LD Covariance Files (for S-PrediXcan)
+
+LD covariance files were calculated using genotype data from the same pig eQTL cohort used for model training.
+
+For each tissue-specific model:
+
+- Muscle:
+  - Muscle_models.db
+  - Muscle_cov.txt.gz
+
+- Liver:
+  - Liver_models.db
+  - Liver_cov.txt.gz
+
+These covariance files are required for summary-level TWAS analysis using [S-PrediXcan](https://github.com/hakyimlab/MetaXcan/wiki/S-PrediXcan-Command-Line-Tutorial).
+
+```bash
+python SPrediXcan.py \
+--model_db_path Muscle_models.db \
+--covariance Muscle_cov.txt.gz \
+--gwas_file pig_trait_GWAS.txt \
+--snp_column SNP \
+--effect_allele_column A1 \
+--non_effect_allele_column A2 \
+--beta_column beta \
+--pvalue_column p \
+--output Muscle_TWAS.txt
 ```
 
 ## Code Availability
