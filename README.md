@@ -41,42 +41,60 @@ The following diagram illustrates the overall pipeline of the project, including
   - Colocalization analysis
     
 
-## TWAS Predictive Model Usage Guide
+## Individual-level PrediXcan Analysis Using Pig TWAS Prediction Models
 
-We provide the necessary shell scripts and corresponding data to facilitate the direct use of pre-built TWAS predictive models.
+We provide the necessary shell scripts and corresponding data to facilitate the use of pre-built pig PrediXcan prediction models for transcriptome-wide association studies (TWAS).
 
-### Note: PrediXcan is Suitable for Individual-Level Data
+
+### Model Description
+
+These prediction models were trained using pig eQTL data based on the [PredictDB](https://github.com/hakyimlab/PredictDB-Tutorial) framework.
+
+- Species: Sus scrofa
+- Genome assembly: Sscrofa11.1
+- Model type: Elastic Net
+- Tissues:
+  - Muscle (Mu)
+  - Liver (Li)
+  - Abdominal adipose (AF)
+  - Backfat (BF)
+    
 
 ### Prerequisites
 
-Ensure you have Python 3.5 or higher. Set up a virtual environment according to the [MetaXcan](https://github.com/hakyimlab/MetaXcan) requirements:
+Ensure you have Python 3.7 or higher. Set up a Python environment following the requirements of [MetaXcan](https://github.com/hakyimlab/MetaXcan):
 
-- numpy (>=1.11.1)
-- scipy (>=0.18.1)
-- pandas (>=0.18.1)
-- patsy (>=0.5.0)
-- statsmodels (>=0.8.0)
-- h5py (>=2.7.1)
-- bgen_reader (>=3.0.3)
-- cyvcf2 (>=0.8.0)
+numpy
+scipy
+pandas
+statsmodels
+patsy
+h5py
+cyvcf2
+bgen_reader
 
-You can also download the PrediXcanAssociation.py and Predict.py scripts from the Association_study folder or MetaXcan.
+You can also download the PrediXcanAssociation.py and Predict.py scripts from the [Association_study folder](https://github.com/jieeewu/swine-genotype-expression-phenotype/tree/main/05_Association_study) or [MetaXcan](https://github.com/hakyimlab/MetaXcan).
 
 ### Input Files
 
-1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the [Tissue_DB](Tissue_DB/) folder (`${tissue}_models.db`). These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).
-2. **Genotype Files**: Phased genotype files in VCF format, which can be either WGS data or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). The SNP ID format should be chrom_position_ref (e.g., 1_502855_C).
-3. **Phenotype Files**: `phenotype_name.list` and `${phenos_file}`. Phenos files containing phenotype data for association analysis, with columns for FID, IID, pheno1, pheno2, etc.
+1. **Predictive Models**: Download the corresponding tissue-specific `*.db` files in the [Tissue_DB](Tissue_DB/) folder (`${tissue}_models.db`). These `*.db` files are obtained using the [PredictDB tutorial](https://github.com/hakyimlab/PredictDB-Tutorial).Each database contains SNP weights for predicting genetically regulated gene expression in a specific tissue.
+2. **Genotype Files**: Phased genotype files in VCF format,generated from WGS or imputed genotype data (imputation server：[SWIM](http://106.13.12.181:9088/#/home)). Variant IDs must match the identifiers used in the prediction models. The SNP ID format should be `chrom_position_ref` (e.g., `1_502855_C`; Sscrofa11.1).
+3. **Phenotype Files**: `phenotype_name.list` and `${phenos_file}`. The phenotype file should contain FID, IID, and phenotype columns (e.g., pheno1, pheno2, etc.)
 
 ### Output Files
 
-1. `${tissue}_prediction_output.txt`
-2. `${tissue}_prediction_summary_output.txt`
-3. `${tissue}_${pheno}_association.txt`
+1. `${tissue}_prediction_output.txt`: Individual-level genetically predicted gene expression matrix.
+2. 2. `${tissue}_prediction_summary_output.txt`: Prediction performance information including number of SNPs used for each gene.
+3. `${tissue}_${pheno}_association.txt`: Association between genetically predicted expression and phenotype.
 
 ### Running the Shell Script
 
 ```bash
+# Mu: Muscle
+# Li: Liver
+# AF: Abdominal adipose
+# BF: Backfat
+
 module load GCCcore/8.2.0 Python/3.7.2
 mkdir -p ${Predixcan}/Predict_output ${Predixcan}/PrediXcanAssociation 
 
