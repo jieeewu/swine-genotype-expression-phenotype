@@ -130,8 +130,7 @@ done
 ```
 
 ## Summary-level TWAS Analysis
-
-For summary-level TWAS analysis, users can use S-PrediXcan with:
+S-PrediXcan uses GWAS summary statistics to perform TWAS.
 
 ### Summary-level S-PrediXcan
 
@@ -145,32 +144,64 @@ Required files:
 Please refer to the MetaXcan [S-PrediXcan documentation](https://github.com/hakyimlab/MetaXcan/wiki/S-PrediXcan-Command-Line-Tutorial).
 
 ### LD Covariance Files (for S-PrediXcan)
-
-LD covariance files were calculated using genotype data from the same pig eQTL cohort used for model training.
+LD covariance files are required only for S-PrediXcan analysis.
+The covariance files were calculated using genotype data from the pig eQTL reference population used for model training.
 
 For each tissue-specific model:
 
 - Muscle:
-  - Muscle_models.db
+  - Mu_models.db
   - Muscle_cov.txt.gz
 
 - Liver:
-  - Liver_models.db
+  - Li_models.db
   - Liver_cov.txt.gz
 
 These covariance files are required for summary-level TWAS analysis using [S-PrediXcan](https://github.com/hakyimlab/MetaXcan/wiki/S-PrediXcan-Command-Line-Tutorial).
 
+### GWAS Summary Statistics Format
+
+For S-PrediXcan analysis, users should provide GWAS summary statistics containing SNP identifiers, alleles, effect sizes, standard errors, and p-values.
+
+Example:
+SNP A1 A2 beta se p
+1_502855_C C T 0.0231 0.0102 0.0235
+1_503001_A A G -0.0154 0.0087 0.0764
+1_503245_G G A 0.0312 0.0121 0.0101
+
+Column description:
+
+- SNP: Variant identifier matching the prediction model (e.g., chrom_position_ref)
+- A1: Effect allele
+- A2: Non-effect allele
+- beta: GWAS effect size for A1 allele
+- se: Standard error of beta
+- p: Association P-value
+
+### Running S-PrediXcan
+  
 ```bash
+#!/bin/bash
+
+GWAS=pig_trait_GWAS.txt
+
+for tissue in Mu Li AF BF
+do
+
+echo "Running S-PrediXcan for ${tissue}"
+
 python SPrediXcan.py \
---model_db_path Muscle_models.db \
---covariance Muscle_cov.txt.gz \
---gwas_file pig_trait_GWAS.txt \
+--model_db_path ${tissue}_models.db \
+--covariance ${tissue}_cov.txt.gz \
+--gwas_file ${GWAS} \
 --snp_column SNP \
 --effect_allele_column A1 \
 --non_effect_allele_column A2 \
 --beta_column beta \
 --pvalue_column p \
---output Muscle_TWAS.txt
+--output ${tissue}_TWAS.txt
+
+done
 ```
 
 ## Code Availability
@@ -187,8 +218,6 @@ If you use this pipeline or code in your work, please cite our manuscript and th
 
 - **Publication:**.
 Jie Wu*, Ming Yang*, Zebin Zhang*, Enqin Zheng*, Zhanwei Zhuang, Shenping Zhou, Cineng Xu, Yibin Qiu, Donglin Ruan, Jianping Quan, Rongrong Ding, ..., Wen Huang#, Jie Yang#, Zhenfang Wu#. *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Nature Communications* (Accepted).
-- **Code Archive:**
-  [Zenodo DOI: https://doi.org/10.5281/zenodo.22275711]
 
 ------
 
