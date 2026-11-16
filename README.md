@@ -139,7 +139,7 @@ and assigned a DOI: https://doi.org/10.5281/zenodo.22275711
 
 ## Citation
 
-If you use this pipeline or code in your work, please cite our manuscript and the archived code:
+If you use this pipeline, database or code in your work, please cite our manuscript and the archived code:
 
 - **Publication:**.
 Jie Wu*, Fanming Meng*, Ming Yang*, Zebin Zhang*, Enqin Zheng, Zhanwei Zhuang, Shenping Zhou, Cineng Xu, Yibin Qiu, Donglin Ruan, Jianping Quan, Rongrong Ding, ..., Wen Huang#, Jie Yang#, Zhenfang Wu#. *Integrative Systems Genetics Analysis Advances Elucidation of the Genetic Basis of Complex Traits in Pigs*. *Nature Communications*,2026 (Accepted).
